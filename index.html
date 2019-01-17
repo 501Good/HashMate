@@ -18,7 +18,7 @@
     <nav class="navbar navbar-expand-sm bg-light">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">
-                <img src="imgs/UT.png" width="100" height="100" alt=""> Hashing Visualisation
+                <img src="imgs/UT.png" width="100" height="100" alt=""> HashMate
             </a>
         </div>
         <ul class="nav navbar-nav">
@@ -35,9 +35,12 @@
                 <div class="col-sm-2">
                     <select id="selectType" class="form-control">
                         <option value="simple"> Simple mode hashing</option>
-                        <option value="linear">Linear hashing</option>
-                        <option value="extendible">Extendible hashing</option>
-
+                        <option value="simple"> Linear probing</option>
+                        <option value="simple"> Quadratic probing</option>
+                        <option value="simple"> Double hashing</option>
+                        <option value="simple"> Chainining</option>
+                        <option value="simple"> Linear hashing</option>
+                        <option value="simple"> Extendible hashing</option>
                     </select>
                 </div>
             </div>
@@ -48,30 +51,30 @@
 
 
                 <div class="col-sm-2">
-
                     <input type="range" min="1" max="20" value="50" class="slider" id="myRange"> <span id="demo"></span>
                 </div>
-                <div class="col-sm-1">
 
-                    <input type="submit" class="btn btn-primary " name="create" value="Create" onclick="createTable()">
+                <div class="col-sm-1">
+                    <input type="button" class="btn btn-primary " name="create" value="Create" onclick="createTable()">
                 </div>
+
             </div>
 
 
             <div class="form-group row">
+
                 <label for="value" class=" col-sm-1  col-form-label">Value</label>
+
                 <div class="col-sm-2">
                     <input type="text" class="form-control" id="value">
                 </div>
 
                 <div class="col-sm-1">
-
-                    <input type="submit" class="btn btn-primary " name="insert" value="Insert" onclick="myFunction()">
+                    <input type="button" class="btn btn-primary " name="insert" value="Insert" onclick="simpleHashing()">
                 </div>
-                <input type="submit" class="btn btn-primary " name="insert" value="Find">
+
+                <input type="button" class="btn btn-primary " name="insert" value="Find">
             </div>
-
-
     </div>
     </form>
     </div>
@@ -101,79 +104,16 @@
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     </div>
     <script>
-        function createTable() {
+            var slider = document.getElementById("myRange");
+            var output = document.getElementById("demo");
+            output.innerHTML = slider.value; // Display the default slider value
+    
+            // Update the current slider value (each time you drag the slider handle)
+            slider.oninput = function () {
+                output.innerHTML = this.value;
+            }</script>
 
-            var size = document.getElementById("myRange").value;
-
-            var c = document.getElementById("canvas");
-            var ctx = c.getContext("2d");
-
-            var table_size=size*50;
-            ctx.strokeStyle = "#dee2e6";
-            initial_x=(1000-table_size)/2;
-            for (var x = initial_x; x < (initial_x+table_size); x += 50) {
-                ctx.strokeRect(x, 50, 50, 50);}
-
-
-            ctx.font = "20px Arial";
-            x =initial_x + 20;
-            for (var i = 0; i < size; i += 1) {
-                ctx.fillText(i, x, 30);
-                x += 50;
-
-            }
-
-        }
-    </script>
-    <script>
-        function myFunction() {
-            var myArray = new Array(10);
-            var value = document.getElementById('value').value;
-            var hash = value % 10;
-            document.getElementsByTagName("th")[hash].innerHTML = value;
-            var c = document.getElementById("canvas");
-            var ctx = c.getContext("2d");
-            ctx.font = "20px Arial";
-            ctx.fillText(value, hash * 50 + 50 + 20, 70);
-
-        }
-    </script>
-
-
-    <script>
-        function draw_arrow(context, startX, startY, size) {
-            var arrowX = startX + 0.75 * size;
-            var arrowTopY = startY - 0.707 * (0.25 * size);
-            var arrowBottomY = startY + 0.707 * (0.25 * size);
-            context.moveTo(startX, startY);
-            context.lineTo(startX + size, startX);
-            context.lineTo(arrowX, arrowTopY);
-            context.moveTo(startX + size, startX);
-            context.lineTo(arrowX, arrowBottomY);
-            context.stroke();
-        }
-        window.onload = function () {
-            var canvas = document.getElementById("canvas");
-            var context = canvas.getContext("2d");
-            var startX = 200;
-            var startY = 200;
-            var size = 100;
-            context.lineWidth = 2;
-            draw_arrow(context, startX, startY, size);
-        }; 
-    </script>
-
-    <script>
-        var slider = document.getElementById("myRange");
-        var output = document.getElementById("demo");
-        output.innerHTML = slider.value; // Display the default slider value
-
-        // Update the current slider value (each time you drag the slider handle)
-        slider.oninput = function () {
-            output.innerHTML = this.value;
-        }</script>
-
-
+    <script src="js/Hash.js"></script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -182,6 +122,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
         crossorigin="anonymous"></script>
     <script src="js/jquery.min.js></script>
+
 </body>
 
 </html>
