@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+        <link rel="stylesheet" href="css/custom.css">
+
+    <title>Hashing visualisation</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-light">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img src="imgs/UT.png" width="100" height="100" alt=""> Hashing Visualisation
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+        </ul>
+        </div>
+    </nav>
+
+    <div class="col-sm-8 offset-sm-4 text-center">
+
+        <form>
+            <div class="form-group row">
+                <label for="selectType" class=" col-sm-1  col-form-label">Type</label>
+
+                <div class="col-sm-2">
+                    <select id="selectType" class="form-control">
+                        <option value="simple"> Simple mode hashing</option>
+                        <option value="linear">Linear hashing</option>
+                        <option value="extendible">Extendible hashing</option>
+
+                    </select>
+                </div>
+            </div>
+
+
+
+            <div class="form-group row">
+                <label for="value" class=" col-sm-1  col-form-label">Value</label>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" id="value">
+                </div>
+
+                <div class="col-sm-2">
+
+                    <input type="submit" class="btn btn-primary " name="insert" value="Insert" onclick="myFunction()">
+                    <input type="submit" class="btn btn-primary " name="insert" value="Find">
+                </div>
+            </div>
+
+
+    </div>
+    </form>
+    </div>
+
+
+    <div class="col-sm-8">
+
+        <table class="table table-bordered">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </table>
+    </div>
+    <div id="container">
+
+    <canvas id="canvas" width="1000" height="500" style="border:1px solid  #d3d3d3;"></canvas>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+</div>
+    <script>
+        var c = document.getElementById("canvas");
+        var ctx = c.getContext("2d");
+        var max = 500;
+        ctx.strokeStyle = "#dee2e6";
+
+        for (var x = 50; x < max; x += 50) {
+            ctx.strokeRect(x, 50, 50, 50);
+        }
+        ctx.font = "20px Arial";
+        x=20;
+        for (var i = 0; i < 10; i += 1) {
+            x+=50;
+            ctx.fillText(i, x, 30);
+
+        }
+    </script>
+    <script>
+        function myFunction() {
+            var myArray = new Array(10);
+            var value = document.getElementById('value').value;
+            var hash = value % 10;
+            document.getElementsByTagName("th")[hash].innerHTML = value;
+            var c = document.getElementById("canvas");
+            var ctx = c.getContext("2d");
+            ctx.font = "20px Arial";
+            ctx.fillText(value, hash*50+50+20, 70);
+
+        }
+    </script>
+
+
+<script> 
+        function draw_arrow(context, startX, startY, size) 
+        { 
+            var arrowX = startX + 0.75*size; 
+            var arrowTopY = startY - 0.707*(0.25*size);  
+            var arrowBottomY = startY + 0.707*(0.25*size); 
+            context.moveTo(startX, startY); 
+            context.lineTo(startX+size, startX); 
+            context.lineTo(arrowX, arrowTopY); 
+            context.moveTo(startX+size, startX); 
+            context.lineTo(arrowX, arrowBottomY); 
+            context.stroke(); 
+        } 
+        window.onload = function(){ 
+            var canvas = document.getElementById("canvas"); 
+            var context = canvas.getContext("2d"); 
+            var startX = 200;  
+            var startY = 200;  
+            var size   = 100; 
+            context.lineWidth = 2; 
+            draw_arrow(context, startX, startY, size); 
+        }; 
+    </script> 
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <script src="js/jquery.min.js></script>
+</body>
+
+</html>

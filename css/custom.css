@@ -1,0 +1,16 @@
+
+#canvas {
+  width: 1000px;
+  height: 500px;
+  border: 5px solid red;
+
+  
+}
+
+#container {
+    width: 1000px;
+    height:500px;
+    margin: 0px auto;
+    text-align: center;
+  }
+  
