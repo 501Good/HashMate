@@ -33,16 +33,18 @@
                 <label for="selectType" class=" col-sm-1  col-form-label">Type</label>
 
                 <div class="col-sm-2">
-                    <select id="selectType" class="form-control">
+                    <select id="selectType" class="form-control" onchange="selectAlgorithm()">
+                        <option  disabled selected value="null"> Select hashing algorithm</option>
                         <option value="simple"> Simple mode hashing</option>
-                        <option value="simple"> Linear probing</option>
-                        <option value="simple"> Quadratic probing</option>
-                        <option value="simple"> Double hashing</option>
-                        <option value="simple"> Chainining</option>
-                        <option value="simple"> Linear hashing</option>
-                        <option value="simple"> Extendible hashing</option>
+                        <option value="linear_probing"> Linear probing</option>
+                        <option value="quadratic_probing"> Quadratic probing</option>
+                        <option value="double_hashing"> Double hashing</option>
+                        <option value="chaining"> Chainining</option>
+                        <option value="linear"> Linear hashing</option>
+                        <option value="extendible"> Extendible hashing</option>
                     </select>
                 </div>
+                <span id="error"></span>
             </div>
 
             <div class="form-group row">
@@ -70,33 +72,16 @@
                 </div>
 
                 <div class="col-sm-1">
-                    <input type="button" class="btn btn-primary " name="insert" value="Insert" onclick="simpleHashing()">
+                    <input type="button" class="btn btn-primary " id="insert" value="Insert"   onclick=validate() >
                 </div>
 
-                <input type="button" class="btn btn-primary " name="insert" value="Find">
+                <input type="button" class="btn btn-primary " id="find" value="Find">
             </div>
     </div>
     </form>
     </div>
 
 
-    <div class="col-sm-8">
-
-        <table class="table table-bordered">
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </table>
-    </div>
     <div id="container">
 
         <canvas id="canvas" width="1000" height="500" style="border:1px solid  #d3d3d3;"></canvas>
