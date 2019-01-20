@@ -89,6 +89,7 @@ function executeAlgorithm() {
         case "bloom":
             bloom();
             break;
+
         default:
 
     }
@@ -481,30 +482,28 @@ function quadraticProbing() {
 
 
 function bloom() {
-    $("#insert").click(function() {
-        ctx.clearRect(300, 150, 500, 300);
-        var value = document.getElementById('value').value;
-        var hash1 = murmurhash3_32_gc(value, seed) % size;
-        var hash2 = fnv1s(value) % size;
+    ctx.clearRect(300, 150, 500, 300);
+    var value = document.getElementById('value').value;
+    var hash1 = murmurhash3_32_gc(value, seed) % size;
+    var hash2 = fnv1s(value) % size;
 
-        ctx.beginPath();
-        ctx.rect(initial_x + hash1 * 50, 50, 50, 50);
-        ctx.rect(initial_x + hash2 * 50, 50, 50, 50);
-        ctx.fillStyle = 'green';
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = 'black';
+    ctx.beginPath();
+    ctx.rect(initial_x + hash1 * 50, 50, 50, 50);
+    ctx.rect(initial_x + hash2 * 50, 50, 50, 50);
+    ctx.fillStyle = 'green';
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = 'black';
 
-        var desc = "String: " + value + "<br/>Murmur hash: " + hash1 + "<br/>FNV hash: " + hash2;
-        $("#description").html(desc);
-        if (bloomCounter == 1) {
-            $("#bloomTable").append('<thead><tr><th scope="col">#</th><th scope="col">String</th><th scope="col">Murmur</th><th scope="col">FNV</th></tr></thead>');
-        }
-        $("#bloomTableBody").append('<tr onclick="selectBloom($(this))" class="bloomRow"><th scope="row">' + bloomCounter + '</th><td id="val">' + value + '</td><td id="hash1">' + hash1 + '</td><td id="hash2">' + hash2 + "</td></tr>");
-        bloomCounter++;
-        greens.add(hash1);
-        greens.add(hash2);
-    });
+    var desc = "String: " + value + "<br/>Murmur hash: " + hash1 + "<br/>FNV hash: " + hash2;
+    $("#description").html(desc);
+    if (bloomCounter == 1) {
+        $("#bloomTable").append('<thead><tr><th scope="col">#</th><th scope="col">String</th><th scope="col">Murmur</th><th scope="col">FNV</th></tr></thead>');
+    }
+    $("#bloomTableBody").append('<tr onclick="selectBloom($(this))" class="bloomRow"><th scope="row">' + bloomCounter + '</th><td id="val">' + value + '</td><td id="hash1">' + hash1 + '</td><td id="hash2">' + hash2 + "</td></tr>");
+    bloomCounter++;
+    greens.add(hash1);
+    greens.add(hash2);
 }
 
 
