@@ -189,13 +189,6 @@ function draw_arrow(context, startX, startY, size) {
     context.lineTo(arrowRightX, arrowY);
     context.stroke();
 }
-function drawText(text) {
-    ctx.font = "20px Arial";
-    ctx.fillText(text, 400, 250);
-
-
-}
-
 
 
 // http://stackoverflow.com/questions/1240408/reading-bytes-from-a-javascript-string/1242596#1242596
@@ -325,7 +318,6 @@ function findChaining() {
     console.log(stored_value);
     if (typeof stored_value == undefined) {
         text = "Element not found"
-        drawText(text)
     }
     else {
         level = 0;
@@ -337,14 +329,13 @@ function findChaining() {
                 ctx.strokeStyle = "green";
                 startY = level * 50 + (level - 1) * 35;
                 ctx.strokeRect(initial_x + hash * 50, startY, 50, 50);
-
                 text = "Element found"
-                ctx.font = "20px Arial";
-                ctx.fillText(text, 400, 470);
                 setTimeout(function () { visualiseFinding(value, hash, level); }, 700);
             }
         }
     }
+    var desc = " Result: " + text;
+    document.getElementById("description").innerHTML=desc;
 }
 
 
@@ -355,18 +346,20 @@ function findChaining() {
 function Chaining() {
     var value = document.getElementById('value').value;
     var hash = (value % size) % size;
+    var text = String(hash) + "=(" + String(value) + "%" + String(size) + ")%" + String(size)
+
     if (typeof hash_table._buckets[hash] == 'undefined') {
+        result="Element added to the table"
         hash_table._buckets[hash] = new Array();
         hash_table._buckets[hash].push(value);
         drawNumber(value, hash, 1)
     }
 
     else if (hash_table._buckets[hash].length == 5) {
-        var text = "Sorry, we can not proceed further"
-        ctx.font = "20px Arial";
-        ctx.fillText(text, 400, 470);
+        var result = "Sorry, we can not proceed further"
     }
     else {
+        result="Collision occurred! Chaining performed!"
         console.log(typeof hash_table._buckets[hash]);
         hash_table._buckets[hash].push(value);
         var collisions = hash_table._buckets[hash].length
@@ -380,6 +373,8 @@ function Chaining() {
         drawNumber(value, hash, collisions)
 
     }
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
 }
 
 
