@@ -133,7 +133,7 @@ function createTable() {
 
     if (algorithm == "null" || (algorithm == "undefined")) { document.getElementById("error").innerHTML = "Please choose an algorithm"; }
     else {
-        if ($("#selectType").val() == "bloom") {
+        if ($("#selectType").val() == "bloom"||$("#selectType").val() == "linear_probing"||$("#selectType").val() == "quadratic_probing"||$("#selectType").val() == "simple") {
             $("#canvas").css("height", "200");
             $("#canvas").attr("height", "200");
             bloomCounter = 1;
