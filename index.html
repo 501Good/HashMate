@@ -33,7 +33,7 @@
                 <label for="selectType" class=" col-sm-1  col-form-label">Type</label>
 
                 <div class="col-sm-2">
-                    <select id="selectType" class="form-control" onchange="selectAlgorithm()">
+                    <select id="selectType" class="form-control" >
                         <option  disabled selected value="null"> Select hashing algorithm</option>
                         <option value="simple"> Simple mode hashing</option>
                         <option value="linear_probing"> Linear probing</option>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="col-sm-1">
-                    <input type="button" class="btn btn-primary " name="create" value="Create" onclick="createTable()">
+                    <input type="button" class="btn btn-primary " name="create" value="Create" onclick="createTable();">
                 </div>
 
             </div>
@@ -72,10 +72,10 @@
                 </div>
 
                 <div class="col-sm-1">
-                    <input type="button" class="btn btn-primary " id="insert" value="Insert"   onclick=validate() >
+                    <input type="button" class="btn btn-primary " id="insert" value="Insert"  disabled  onclick=validate() >
                 </div>
 
-                <input type="button" class="btn btn-primary " id="find" value="Find">
+                <input type="button" class="btn btn-primary " id="find" value="Find"  disabled   onclick=validateFinding() >
             </div>
     </div>
     </form>
