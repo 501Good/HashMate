@@ -132,26 +132,20 @@ function createTable() {
     size = document.getElementById("myRange").value;
 
     if (algorithm == "null" || (algorithm == "undefined")) { document.getElementById("error").innerHTML = "Please choose an algorithm"; }
-    else {
-<<<<<<< HEAD
-        if ($("#selectType").val() == "bloom"||$("#selectType").val() == "linear_probing"||$("#selectType").val() == "quadratic_probing"||$("#selectType").val() == "simple") {
-            $("#canvas").css("height", "200");
-            $("#canvas").attr("height", "200");
-=======
-        if ($("#selectType").val() == "bloom") {
-            $("#canvas").css("height", "100");
-            $("#canvas").attr("height", "100");
->>>>>>> f3f23d5cf67db6ed36f1c850ce94c0d36636bb07
-            bloomCounter = 1;
-            $("#bloomTable").empty();
-            greens = new Set([]);
-        } else {
-            $("#canvas").css("height", "500");
-            $("#canvas").attr("height", "500");
-            $("#bloomTable").empty();
-            greens = new Set([]);
-        }
-      
+        else {
+            if ($("#selectType").val() == "bloom"||$("#selectType").val() == "linear_probing"||$("#selectType").val() == "quadratic_probing"||$("#selectType").val() == "simple") {
+                $("#canvas").css("height", "100");
+                $("#canvas").attr("height", "100");
+                bloomCounter = 1;
+                $("#bloomTable").empty();
+                greens = new Set([]);
+            } else {
+                $("#canvas").css("height", "500");
+                $("#canvas").attr("height", "500");
+                $("#bloomTable").empty();
+                greens = new Set([]);
+            }
+        
         hash_table = new HashTable(size);
         //Draw the table
         ctx.clearRect(0, 0, c.width, c.height);
@@ -245,6 +239,16 @@ function visualiseCollision(value, hash, collisions) {
 
 }
 
+function visualiseCollisionSimple(value, hash, collision) {
+        ctx.clearRect(initial_x + hash * 50, 50, 50, 50);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#dee2e6";
+        ctx.strokeRect(initial_x + hash * 50, 50, 50, 50);
+        drawNumber(collision, hash, 1);
+    }
+
+
+
 
 function visualiseFinding(value, hash, level) {
     startY = level * 50 + (level - 1) * 35;
@@ -260,39 +264,37 @@ function visualiseGreen(hash) {
     ctx.lineWidth = 2;
     ctx.strokeStyle = "green";
     ctx.strokeRect(initial_x + hash * 50, 50, 50, 50);
-    ctx.clearRect(300, 150, 500, 300);
-    text = "Element found"
-    drawText(text)
 }
 
 
 function simpleHashing() {
 
-    ctx.clearRect(300, 150, 500, 300);
-    var value = document.getElementById('value').value;
-    var hash = (value % size) % size;
-    var text = String(hash) + "=(" + String(value) + "%" + String(size) + ")%" + String(size)
-    drawText(text)
+    var input = document.getElementById('value').value;
+    console.log(input)
+    var hash = (input % size) % size;
+    var text = String(hash) + "=(" + String(input) + "%" + String(size) + ")%" + String(size)
+    var result="";
 
     //Store collisions
     var collisions = new Array();
     if (typeof hash_table._buckets[hash] == 'undefined') {
-        hash_table._buckets[hash] = value;
-        drawNumber(value, hash, 1)
+        hash_table._buckets[hash] = input;
+        drawNumber(input, hash, 1)
+        result="Element inserted on table"
     }
 
     else {
         collisions.push(hash)
         ctx.lineWidth = 2;
         ctx.strokeStyle = "red";
-        ctx.clearRect(300, 150, 500, 300);
-        text = "Collision occurred"
-        drawText(text)
-
+        result="Collision occurred"
         ctx.strokeRect(initial_x + hash * 50, 50, 50, 50);
-        setTimeout(function () { visualiseCollision(value, hash, collisions); }, 700);
+        setTimeout(function () { visualiseCollisionSimple(input, hash, hash); }, 400);
 
     }
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
+
 }
 
 function findSimpleHashing() {
@@ -301,14 +303,17 @@ function findSimpleHashing() {
     var stored_value = hash_table._buckets[hash];
 
     if (stored_value == value) {
+        text="Element found"
         visualiseGreen(hash)
         setTimeout(function () { visualiseFinding(value, hash, 1); }, 700);
     }
 
     else {
         text = "Element not found"
-        drawText(text)
     }
+
+    var desc = "Result: " + text ;
+    document.getElementById("description").innerHTML=desc;
 }
 
 
@@ -385,14 +390,16 @@ function linearProbing() {
     var value = document.getElementById('value').value;
     var hash = ((value % size) + prob) % size;
     var text = String(hash) + "=(" + String(value) + "mod" + String(size) + ")+" + String(prob) + ")mod" + String(size)
-    drawText(text)
     var prev_hash = hash;
     console.log(prev_hash);
     var collisions = new Array();
     var values = new Array();
-
+if (typeof hash_table._buckets[hash] == 'undefined'){
+    result="Element inserted on the table"
+}
 
     while (typeof hash_table._buckets[hash] !== 'undefined') {
+        result="Collision occurred! Linear probing applied."
         stored_value = hash_table._buckets[hash];
         collisions.push(hash);
         values.push(stored_value)
@@ -401,8 +408,9 @@ function linearProbing() {
 
         if (prev_hash == hash) {
             ctx.clearRect(300, 150, 500, 300);
-            text = "No valid empty positions";
-            drawText(text);
+            text = "Result: No valid empty positions";
+            document.getElementById("description").innerHTML=text;
+
             break
         }
     }
@@ -415,11 +423,12 @@ function linearProbing() {
     }
     setTimeout(function () { visualiseCollision(value, values, collisions); }, 200);
 
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
 
     hash_table._buckets[hash] = value;
-    console.log("cc")
-    console.log(hash_table._buckets[hash]);
     drawNumber(value, hash, 1)
+
 }
 
 
@@ -430,8 +439,9 @@ function findLinearProbing() {
     var stored_value = hash_table._buckets[hash];
     console.log(stored_value);
     if (typeof stored_value == undefined) {
-        text = "Element not found"
-        drawText(text)
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
+
     }
     else {
         while (stored_value !== value) {
@@ -439,6 +449,8 @@ function findLinearProbing() {
             hash = ((value % size) + prob) % size;
             stored_value = hash_table._buckets[hash];
         }
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
     }
 
     visualiseGreen(hash)
@@ -456,10 +468,12 @@ function quadraticProbing() {
     var collisions = new Array();
     var values = new Array();
     var text = String(hash) + "=(" + String(value) + "%" + String(size) + ")+" + String(prob) + ")%" + String(size)
-    drawText(text)
-
+    if (typeof hash_table._buckets[hash] == 'undefined'){
+        result="Element inserted on the table"
+    }
 
     while (typeof hash_table._buckets[hash] !== 'undefined') {
+        result="Collision occurred! Quadratic probing applied."
         stored_value = hash_table._buckets[hash];
         collisions.push(hash);
         values.push(stored_value)
@@ -467,9 +481,8 @@ function quadraticProbing() {
         hash = ((value % size) + prob) % size;
 
         if (prev_hash == hash) {
-            ctx.clearRect(300, 150, 500, 300);
             text = "No valid empty positions";
-            drawText(text);
+            document.getElementById("description").innerHTML=text;
             break
         }
     }
@@ -482,10 +495,9 @@ function quadraticProbing() {
     }
     setTimeout(function () { visualiseCollision(value, values, collisions); }, 200);
 
-
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
     hash_table._buckets[hash] = value;
-    console.log("cc")
-    console.log(hash_table._buckets[hash]);
     drawNumber(value, hash, 1)
 
 }
@@ -592,8 +604,9 @@ function findQuadraticProbing() {
     var stored_value = hash_table._buckets[hash];
     console.log(stored_value);
     if (typeof stored_value == undefined) {
-        text = "Element not found"
-        drawText(text)
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
+
     }
 
     else {
@@ -602,6 +615,8 @@ function findQuadraticProbing() {
             hash = ((value % size) + prob) % size;
             stored_value = hash_table._buckets[hash];
         }
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
     }
 
     visualiseGreen(hash)
