@@ -32,7 +32,8 @@ function selectAlgorithm() {
 
         case "bloom":
             algorithm = "bloom";
-            
+            break;
+
         default:
             algorithm = "null";
 
@@ -101,7 +102,8 @@ function validate() {
     document.getElementById("error").innerHTML = "";
     number = document.getElementById("value").value;
     num = Number(number);
-    if ((number == "") || (num > 99999) || (num < 0) || (isNaN(num))) { document.getElementById("error").innerHTML = "Please insert a positive integer up to 5-digits"; }
+    if (algorithm == "bloom") {executeAlgorithm();}
+    else if ((number == "") || (num > 99999) || (num < 0) || (isNaN(num))) { document.getElementById("error").innerHTML = "Please insert a positive integer up to 5-digits"; }
     else { executeAlgorithm(); }
 
 }
