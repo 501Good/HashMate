@@ -30,6 +30,9 @@ function selectAlgorithm() {
             algorithm = "chaining";
             break;
 
+        case "bloom":
+            algorithm = "bloom";
+            
         default:
             algorithm = "null";
 
@@ -60,32 +63,7 @@ function findAlgorithm() {
 }
 
 
-    else if (selection == "bloom") {
-        $("#insert").click(function() {
-            ctx.clearRect(300, 150, 500, 300);
-            var value = document.getElementById('value').value;
-            var hash1 = murmurhash3_32_gc(value, seed) % size;
-            var hash2 = fnv1s(value) % size;
 
-            ctx.beginPath();
-            ctx.rect(initial_x + hash1 * 50, 50, 50, 50);
-            ctx.rect(initial_x + hash2 * 50, 50, 50, 50);
-            ctx.fillStyle = 'green';
-            ctx.fill();
-            ctx.stroke();
-            ctx.fillStyle = 'black';
-
-            var desc = "String: " + value + "<br/>Murmur hash: " + hash1 + "<br/>FNV hash: " + hash2;
-            $("#description").html(desc);
-            if (bloomCounter == 1) {
-                $("#bloomTable").append('<thead><tr><th scope="col">#</th><th scope="col">String</th><th scope="col">Murmur</th><th scope="col">FNV</th></tr></thead>');
-            }
-            $("#bloomTableBody").append('<tr onclick="selectBloom($(this))" class="bloomRow"><th scope="row">' + bloomCounter + '</th><td id="val">' + value + '</td><td id="hash1">' + hash1 + '</td><td id="hash2">' + hash2 + "</td></tr>");
-            bloomCounter++;
-            greens.add(hash1);
-            greens.add(hash2);
-        });
-    }
 
 function executeAlgorithm() {
 
@@ -105,6 +83,10 @@ function executeAlgorithm() {
 
         case "chaining":
             Chaining();
+            break;
+
+        case "bloom":
+            bloom();
             break;
         default:
 
@@ -157,28 +139,26 @@ function createTable() {
             $("#canvas").attr("height", "500");
         }
       
-    hash_table = new HashTable(size);
-    //Draw the table
-    ctx.clearRect(0, 0, c.width, c.height);
-    var table_size = size * 50;
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#dee2e6";
-    initial_x = (1000 - table_size) / 2;
+        hash_table = new HashTable(size);
+        //Draw the table
+        ctx.clearRect(0, 0, c.width, c.height);
+        var table_size = size * 50;
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#dee2e6";
+        initial_x = (1000 - table_size) / 2;
 
-    for (var x = initial_x; x < (initial_x + table_size); x += 50) { ctx.strokeRect(x, 50, 50, 50); }
-    //Draw the indexes 
-    ctx.font = "20px Arial";
-    x = initial_x + 20;
-    for (var i = 0; i < size; i += 1) {
-        ctx.fillText(i, x, 40);
-        x += 50;
+        for (var x = initial_x; x < (initial_x + table_size); x += 50) { ctx.strokeRect(x, 50, 50, 50); }
+        //Draw the indexes 
+        ctx.font = "20px Arial";
+        x = initial_x + 20;
+        for (var i = 0; i < size; i += 1) {
+            ctx.fillText(i, x, 40);
+            x += 50;
+        }
+
+        document.getElementById("insert").disabled = false;
+        document.getElementById("find").disabled = false;
     }
-
-    document.getElementById("insert").disabled = false;
-    document.getElementById("find").disabled = false;
-}
-
-
 }
 
 function drawNumber(value, hash, level) {
@@ -239,6 +219,7 @@ function fnv1s(str) {
       hash ^= bytes[i];
     }
     return Math.abs(hash);
+}
 
 function visualiseCollision(value, hash, collisions) {
     for (var i = 0; i < collisions.length; i++) {
@@ -494,6 +475,34 @@ function quadraticProbing() {
     console.log(hash_table._buckets[hash]);
     drawNumber(value, hash, 1)
 
+}
+
+
+function bloom() {
+    $("#insert").click(function() {
+        ctx.clearRect(300, 150, 500, 300);
+        var value = document.getElementById('value').value;
+        var hash1 = murmurhash3_32_gc(value, seed) % size;
+        var hash2 = fnv1s(value) % size;
+
+        ctx.beginPath();
+        ctx.rect(initial_x + hash1 * 50, 50, 50, 50);
+        ctx.rect(initial_x + hash2 * 50, 50, 50, 50);
+        ctx.fillStyle = 'green';
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = 'black';
+
+        var desc = "String: " + value + "<br/>Murmur hash: " + hash1 + "<br/>FNV hash: " + hash2;
+        $("#description").html(desc);
+        if (bloomCounter == 1) {
+            $("#bloomTable").append('<thead><tr><th scope="col">#</th><th scope="col">String</th><th scope="col">Murmur</th><th scope="col">FNV</th></tr></thead>');
+        }
+        $("#bloomTableBody").append('<tr onclick="selectBloom($(this))" class="bloomRow"><th scope="row">' + bloomCounter + '</th><td id="val">' + value + '</td><td id="hash1">' + hash1 + '</td><td id="hash2">' + hash2 + "</td></tr>");
+        bloomCounter++;
+        greens.add(hash1);
+        greens.add(hash2);
+    });
 }
 
 
