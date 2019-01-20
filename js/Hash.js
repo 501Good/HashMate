@@ -134,12 +134,16 @@ function createTable() {
     if (algorithm == "null" || (algorithm == "undefined")) { document.getElementById("error").innerHTML = "Please choose an algorithm"; }
     else {
         if ($("#selectType").val() == "bloom") {
-            $("#canvas").css("height", "200");
-            $("#canvas").attr("height", "200");
+            $("#canvas").css("height", "100");
+            $("#canvas").attr("height", "100");
             bloomCounter = 1;
+            $("#bloomTable").empty();
+            greens = new Set([]);
         } else {
             $("#canvas").css("height", "500");
             $("#canvas").attr("height", "500");
+            $("#bloomTable").empty();
+            greens = new Set([]);
         }
       
         hash_table = new HashTable(size);
@@ -498,7 +502,8 @@ function bloom() {
     var desc = "String: " + value + "<br/>Murmur hash: " + hash1 + "<br/>FNV hash: " + hash2;
     $("#description").html(desc);
     if (bloomCounter == 1) {
-        $("#bloomTable").append('<thead><tr><th scope="col">#</th><th scope="col">String</th><th scope="col">Murmur</th><th scope="col">FNV</th></tr></thead>');
+        $("#bloomTable").append('<thead id="bloomTableHead"><tr><th scope="col">#</th><th scope="col">String</th><th scope="col">Murmur</th><th scope="col">FNV</th></tr></thead>');
+        $("#bloomTable").append('<tbody id="bloomTableBody"></tbody>');
     }
     $("#bloomTableBody").append('<tr onclick="selectBloom($(this))" class="bloomRow"><th scope="row">' + bloomCounter + '</th><td id="val">' + value + '</td><td id="hash1">' + hash1 + '</td><td id="hash2">' + hash2 + "</td></tr>");
     bloomCounter++;
