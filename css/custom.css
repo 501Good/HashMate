@@ -1,4 +1,8 @@
 
+/*https://www.w3schools.com/howto/howto_js_rangeslider.asp*/
+
+
+
 #canvas {
   width: 1000px;
   height: 500px;
@@ -51,3 +55,9 @@
     cursor: pointer;
   }
 
+  body {
+    margin-top: 30px;
+    background-color: white;
+  }
+  
+ 
