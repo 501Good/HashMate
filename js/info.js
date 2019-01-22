@@ -1,3 +1,7 @@
+var open_closed_linear=-1;
+var open_closed_quadratic=-1;
+var open_closed_chaining=-1;
+var open_closed_bloom=-1;
 
 var text_linear = " Linear Probing is a method to resolve collisions by using just a regular one dimensional array. The techniques where we do not use additional space are called closed addresing. "+
 "The insertion algorithm is as follows: Firstly use hash function to find index for a key. If that spot is occupied, we continue to find next available spot in a higher index."+
@@ -5,7 +9,7 @@ var text_linear = " Linear Probing is a method to resolve collisions by using ju
 "Records  adjacent to each other without any empty spots form clusters" + 
 "To search we hash the key with same hash function and move forward till the element found. To speed up the search we break the loop as soon as an empty slot is found."
    
-var text_quadratic = "Linear Probing is a method to resolve collisions by using just a regular one dimensional array. The techniques where we do not use additional space are called closed addresing. "+
+var text_quadratic = "Quadratic Probing, same as Linear Probing,  is a method to resolve collisions by using just a regular one dimensional array. The techniques where we do not use additional space are called closed addresing. "+
 "The insertion algorithm is as follows: Firstly use hash function to find index for a key. If that spot is occupied, we continue to find next available spot in a higher index."+
 "If we reach the end of the hash table we go back to the begining. In order to avoid an infinite loop in cases with no empty spot we keep track of the position where we started. If we encounter it again we break the loop"+
 "Records  adjacent to each other without any empty spots form clusters" + 
@@ -18,26 +22,45 @@ var text_bloom = "Bloom filters are probabilistic data structures that support t
 "False positive rate depends from the size of hash tables. When the size increases the rate of false positives will decrease exponentially. If at least one bit is 0 the response will be definitely not in the table."
 
 function showLinear() {
-
+    if(open_closed_linear==-1){
     document.getElementById("text1").innerHTML = text_linear;
-
 }
+else{
+    document.getElementById("text1").innerHTML=""
+}
+open_closed_linear*=-1;}
 
 function showQuadratic() {
 
-    document.getElementById("text2").innerHTML = text_quadratic;
+    if(open_closed_quadratic==-1){
+        document.getElementById("text2").innerHTML = text_quadratic;
+    }
+    else{
+        document.getElementById("text2").innerHTML=""
+    }
+    open_closed_quadratic*=-1;
 
 }
 
 
 function showChaining() {
 
-    document.getElementById("text3").innerHTML = text_chaining;
-
+    if(open_closed_chaining==-1){
+        document.getElementById("text3").innerHTML = text_chaining;
+    }
+    else{
+        document.getElementById("text3").innerHTML=""
+    }
+    open_closed_chaining*=-1;
 }
 
 function showBloom() {
 
-    document.getElementById("text4").innerHTML = text_bloom;
-
+    if(open_closed_bloom==-1){
+        document.getElementById("text4").innerHTML = text_bloom;
+    }
+    else{
+        document.getElementById("text4").innerHTML=""
+    }
+    open_closed_bloom*=-1;
 }
