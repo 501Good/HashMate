@@ -12,7 +12,7 @@ _Hashing_ is the process of converting an input of any size and length,  to eith
 There are many ways to hash an input. This makes choosing a good hash function difficult. A good hash function should:
 - be stable;
 - be fast;
- -produce a uniformly distributed hash values
+- produce a uniformly distributed hash values
 
 One of the main challenges in hashing is avoiding _collisions_. Sometimes, a hash function produces the same hash value for different outputs. It's near impossible to completely avoid this when the number of inputs is high but there exist various methods to minimize the collisions.
 
