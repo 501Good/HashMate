@@ -16,26 +16,45 @@ function selectAlgorithm() {
     switch (selection) {
         case "simple":
             algorithm = "simpleHashing";
+            $("#valueLabel").text("Value");
+            removeCanvas();
+            restoreCanvas();
             break;
 
         case "linear_probing":
             algorithm = "linearProbing";
+            $("#valueLabel").text("Value");
+            removeCanvas();
+            restoreCanvas();
             break;
 
         case "quadratic_probing":
             algorithm = "quadraticProbing";
+            $("#valueLabel").text("Value");
+            removeCanvas();
+            restoreCanvas();
             break;
 
         case "chaining":
             algorithm = "chaining";
+            $("#valueLabel").text("Value");
+            removeCanvas();
+            restoreCanvas();
             break;
 
         case "bloom":
             algorithm = "bloom";
+            $("#valueLabel").text("Value");
+            removeCanvas();
+            restoreCanvas();
+            minimizeCanvas();
             break;
 
         case "universal":
             algorithm = "universal";
+            $("#valueLabel").text("Elements");
+            $("#find").prop("disabled", true);
+            removeCanvas();
             break;
 
         default:
@@ -95,7 +114,8 @@ function executeAlgorithm() {
             break;
 
         case "universal":
-            $('#canvas').hide();
+            $("svg").remove();
+            $("#container").append("<svg></svg>");
             var prime = 31;
             var value = parseInt($("#value").val());
             var tableSize = parseInt($("#myRange").val());
@@ -104,7 +124,7 @@ function executeAlgorithm() {
                 collisions[i] = 0;
             }
             var hash = 0;
-            for (var i = 0; i < 100; i += 1) {
+            for (var i = 0; i < value; i += 1) {
                 hash = universalHashing(Math.floor(Math.random() * 2e32), prime, tableSize);
                 collisions[hash] += 1;
             }
@@ -131,7 +151,10 @@ function executeAlgorithm() {
 function drawBarChart(sample, tableSize) {
     const svg = d3.select('svg');
     const svgContainer = d3.select('#svg-container');
-    
+
+    var maxKey = sample.reduce((max, p) => p.value > max ? p.value : max, sample[0].value);
+    console.log(maxKey);
+
     const margin = 80;
     const width = 1000 - 2 * margin;
     const height = 600 - 2 * margin;
@@ -146,7 +169,7 @@ function drawBarChart(sample, tableSize) {
     
     const yScale = d3.scaleLinear()
         .range([height, 0])
-        .domain([0, tableSize]);
+        .domain([0, maxKey * 1.2]);
 
     const makeYLines = () => d3.axisLeft()
         .scale(yScale)
@@ -279,6 +302,39 @@ function HashTable(size) {
 }
 
 
+function removeCanvas() {
+    $("#canvas").css("height", "0");
+    $("#canvas").attr("height", "0");
+    $("#canvas").css("width", "0");
+    $("#canvas").attr("width", "0");
+    $("svg").remove();
+    $("#container").append("<svg></svg>");
+}
+
+
+function restoreCanvas() {
+    $("#canvas").css("height", "500");
+    $("#canvas").attr("height", "500");
+    $("#canvas").css("width", "1000");
+    $("#canvas").attr("width", "1000");
+    $("#bloomTable").empty();
+    $("svg").remove();
+    greens = new Set([]);
+}
+
+
+function minimizeCanvas() {
+    $("#canvas").css("height", "100");
+    $("#canvas").attr("height", "100");
+    $("#canvas").css("width", "1000");
+    $("#canvas").attr("width", "1000");
+    bloomCounter = 1;
+    $("svg").remove();
+    $("#bloomTable").empty();
+    greens = new Set([]);
+}
+
+
 function createTable() {
 
     selectAlgorithm()
@@ -287,25 +343,6 @@ function createTable() {
 
     if (algorithm == "null" || (algorithm == "undefined")) { document.getElementById("error").innerHTML = "Please choose an algorithm"; }
     else {
-        if ($("#selectType").val() == "bloom") {
-            $("#canvas").css("height", "100");
-            $("#canvas").attr("height", "100");
-            bloomCounter = 1;
-            $("#bloomTable").empty();
-            greens = new Set([]);
-        }
-        else if ($("#selectType").val() == "universal") {
-            $("#canvas").css("height", "0");
-            $("#canvas").attr("height", "0");
-            $("#canvas").css("width", "0");
-            $("#canvas").attr("width", "0");
-        } else {
-            $("#canvas").css("height", "500");
-            $("#canvas").attr("height", "500");
-            $("#bloomTable").empty();
-            greens = new Set([]);
-        }
-      
         hash_table = new HashTable(size);
         //Draw the table
         ctx.clearRect(0, 0, c.width, c.height);
@@ -324,7 +361,9 @@ function createTable() {
         }
 
         document.getElementById("insert").disabled = false;
-        document.getElementById("find").disabled = false;
+        if (algorithm != "universal") {
+            document.getElementById("find").disabled = false;
+        }
     }
 }
 
