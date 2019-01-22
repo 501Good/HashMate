@@ -37,3 +37,5 @@ Users can choose the size of the table from 1 to 20. After an element is inserte
 ![UT](https://www.ut.ee/sites/default/files/styles/ut_content_width/public/tu_logod_17122015_horisontaal_eng_sinine_2.png)
 
 ![IT Academy](https://www.cs.ut.ee/sites/default/files/styles/ut_content_width/public/ita_small-logo-eng.png)
+
+**Ministry of Foreign Affairs Development Cooperation Program 1**
