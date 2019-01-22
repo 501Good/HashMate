@@ -48,6 +48,7 @@ function selectAlgorithm() {
             removeCanvas();
             restoreCanvas();
             minimizeCanvas();
+            $("#collisionProb").text("False positive probability: 0%");
             break;
 
         case "universal":
@@ -82,6 +83,11 @@ function findAlgorithm() {
         case "chaining":
             findChaining();
             break;
+
+        case "bloom":
+            findBloom();
+            break;
+
         default:
     }
 }
@@ -290,7 +296,8 @@ function validateFinding() {
     document.getElementById("error").innerHTML = "";
     number = document.getElementById("value").value;
     num = Number(number);
-    if ((number == "") || (num > 99999) || (num < 0) || (isNaN(num))) { document.getElementById("error").innerHTML = "Please insert a positive integer up to 5-digits"; }
+    if (algorithm == "bloom") {findAlgorithm();}
+    else if ((number == "") || (num > 99999) || (num < 0) || (isNaN(num))) { document.getElementById("error").innerHTML = "Please insert a positive integer up to 5-digits"; }
     else { findAlgorithm(); }
 }
 
@@ -308,8 +315,10 @@ function removeCanvas() {
     $("#canvas").css("width", "0");
     $("#canvas").attr("width", "0");
     $("svg").remove();
-    $("#container").append("<svg></svg>");
+    $("#collisionProb").remove();
+    $("#container").prepend("<svg></svg>");
     $("#description").empty();
+    $("#bloomTable").empty();
 }
 
 
@@ -320,8 +329,10 @@ function restoreCanvas() {
     $("#canvas").attr("width", "1000");
     $("#bloomTable").empty();
     $("svg").remove();
+    $("#collisionProb").remove();
     greens = new Set([]);
     $("#description").empty();
+    $("#bloomTable").empty();
 }
 
 
@@ -332,6 +343,8 @@ function minimizeCanvas() {
     $("#canvas").attr("width", "1000");
     bloomCounter = 1;
     $("svg").remove();
+    $("#collisionProb").remove();
+    $("#container").prepend('<p id="collisionProb"></p>');
     $("#bloomTable").empty();
     greens = new Set([]);
     $("#description").empty();
@@ -701,14 +714,30 @@ function quadraticProbing() {
 
 
 function bloom() {
-    ctx.clearRect(300, 150, 500, 300);
+    ctx.clearRect(0, 48, 1000, 300);
     var value = document.getElementById('value').value;
     var hash1 = murmurhash3_32_gc(value, seed) % size;
     var hash2 = fnv1s(value) % size;
+    greens.forEach(function(e) {
+        if (e != hash1 || e != hash2) {
+            ctx.clearRect(initial_x + e * 50, 50, 50, 50); 
+            ctx.clearRect(initial_x + e * 50, 50, 50, 50); 
+            ctx.beginPath();
+            ctx.rect(initial_x + e * 50, 50, 50, 50); 
+            ctx.rect(initial_x + e * 50, 50, 50, 50); 
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#dee2e6";
+            ctx.fillStyle = 'green';
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = 'black';
+        }
+    });
 
     ctx.beginPath();
     ctx.rect(initial_x + hash1 * 50, 50, 50, 50);
     ctx.rect(initial_x + hash2 * 50, 50, 50, 50);
+    ctx.lineWidth = 2;
     ctx.fillStyle = 'green';
     ctx.fill();
     ctx.stroke();
@@ -724,11 +753,15 @@ function bloom() {
     bloomCounter++;
     greens.add(hash1);
     greens.add(hash2);
+
+    var falsePositiveProb = Math.round((Math.pow(greens.size / size, 2)) * 100);
+    $("#collisionProb").text("False positive probability: " + falsePositiveProb + "%");
 }
 
 
 function selectBloom(el) {
     console.log(el);
+    ctx.clearRect(0, 48, 1000, 300);
     var hash1 = parseInt(el.find("td#hash1").text());
     var hash2 = parseInt(el.find("td#hash2").text());
     greens.forEach(function(e) {
@@ -755,6 +788,68 @@ function selectBloom(el) {
     ctx.fill();
     ctx.stroke();
     ctx.fillStyle = 'black';
+}
+
+
+function findBloom() {
+    ctx.clearRect(0, 48, 1000, 300);
+    var value = document.getElementById('value').value;
+    var hash1 = murmurhash3_32_gc(value, seed) % size;
+    var hash2 = fnv1s(value) % size;
+    greens.forEach(function(e) {
+        if (e != hash1 || e != hash2) {
+            ctx.clearRect(initial_x + e * 50, 50, 50, 50); 
+            ctx.clearRect(initial_x + e * 50, 50, 50, 50); 
+            ctx.beginPath();
+            ctx.rect(initial_x + e * 50, 50, 50, 50); 
+            ctx.rect(initial_x + e * 50, 50, 50, 50); 
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#dee2e6";
+            ctx.fillStyle = 'green';
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = 'black';
+        }
+    });
+    ctx.beginPath();
+    ctx.rect(initial_x + hash1 * 50, 50, 50, 50); 
+    if (greens.has(hash1)){
+        ctx.fillStyle = 'green';
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "blue";
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = 'black';
+    } else {
+        ctx.fillStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "blue";
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = 'black';
+    }
+    ctx.beginPath();
+    ctx.rect(initial_x + hash2 * 50, 50, 50, 50); 
+    if (greens.has(hash2)){
+        ctx.fillStyle = 'green';
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "blue";
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = 'black';
+    } else {
+        ctx.fillStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "blue";
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = 'black';
+    }
+    if (greens.has(hash1) && greens.has(hash2)) {
+        $("#description").text("'" + value + "' is probably in the filter");
+    } else {
+        $("#description").text("'" + value + "' is definitely not in the filter");
+    }
 }
 
 
