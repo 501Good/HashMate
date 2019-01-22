@@ -122,7 +122,7 @@ function executeAlgorithm() {
         case "universal":
             $("svg").remove();
             $("#container").append("<svg></svg>");
-            var prime = 31;
+            var prime = 541;
             var value = parseInt($("#value").val());
             var tableSize = parseInt($("#myRange").val());
             var collisions = {};

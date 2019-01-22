@@ -2,6 +2,7 @@ var open_closed_linear=-1;
 var open_closed_quadratic=-1;
 var open_closed_chaining=-1;
 var open_closed_bloom=-1;
+var open_closed_universal=-1;
 
 var text_linear = " Linear Probing is a method to resolve collisions by using just a regular one dimensional array. The techniques where we do not use additional space are called closed addresing. "+
 "The insertion algorithm is as follows: Firstly use hash function to find index for a key. If that spot is occupied, we continue to find next available spot in a higher index."+
@@ -20,6 +21,9 @@ var text_bloom = "Bloom filters are probabilistic data structures that support t
 "The bit will be set to 1 for each of the positions we are adding the element. To see if the element it exist in the hash tables you hash same element again and check if the bit in those position" +
 "is equal to one. All bits should be one for the response to be ” possibly in the table” because the bits might have been overwritten by other elements. In this case we get a false positive. "+
 "False positive rate depends from the size of hash tables. When the size increases the rate of false positives will decrease exponentially. If at least one bit is 0 the response will be definitely not in the table."
+
+var text_universal = "Universal hashing is selecting a hash function from a family of hash functions with a certain mathematical property. This helps to avoid a high number of collisions. " +
+"The mathematical property for the universal hashing is that it usually guarantees a uniform distribution of hash values."
 
 function showLinear() {
     if(open_closed_linear==-1){
@@ -63,4 +67,15 @@ function showBloom() {
         document.getElementById("text4").innerHTML=""
     }
     open_closed_bloom*=-1;
+}
+
+function showUniversal() {
+
+    if(open_closed_universal==-1){
+        document.getElementById("text5").innerHTML = text_universal;
+    }
+    else{
+        document.getElementById("text5").innerHTML=""
+    }
+    open_closed_universal*=-1;
 }
