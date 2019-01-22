@@ -1,5 +1,5 @@
 # HashMate
-Home to the Advanced Algorithmics course project by Salijona Dyrmishi and Kirill Milintsevich
+Home to the Advanced Algorithmics course project by [Salijona Dyrmishi](https://github.com/salijona) and Kirill Milintsevich
 
 You can try the web interface [here](https://501good.github.io/hash/index.html).
 
