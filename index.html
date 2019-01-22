@@ -41,6 +41,7 @@
                         <option value="double_hashing"> Double hashing</option>
                         <option value="chaining"> Chainining</option>
                         <option value="linear"> Linear hashing</option>
+                        <option value="universal"> Universal hashing</option>
                         <option value="extendible"> Extendible hashing</option>
                         <option value="bloom"> Bloom Filter</option>
                     </select>
@@ -85,6 +86,8 @@
 
     <div id="container">
 
+            <svg></svg>
+
         <canvas id="canvas" width="1000" height="500" style="border:1px solid  #d3d3d3;"></canvas>
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -107,6 +110,8 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
 
     <script src="js/Hash.js"></script>
     <script src="js/murmurhash3_gc.js"></script>
