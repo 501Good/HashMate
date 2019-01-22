@@ -18,21 +18,21 @@ function selectAlgorithm() {
             algorithm = "simpleHashing";
             $("#valueLabel").text("Value");
             removeCanvas();
-            restoreCanvas();
+            minimizeCanvas();
             break;
 
         case "linear_probing":
             algorithm = "linearProbing";
             $("#valueLabel").text("Value");
             removeCanvas();
-            restoreCanvas();
+            minimizeCanvas();
             break;
 
         case "quadratic_probing":
             algorithm = "quadraticProbing";
             $("#valueLabel").text("Value");
             removeCanvas();
-            restoreCanvas();
+            minimizeCanvas();
             break;
 
         case "chaining":
@@ -388,13 +388,6 @@ function draw_arrow(context, startX, startY, size) {
     context.lineTo(arrowRightX, arrowY);
     context.stroke();
 }
-function drawText(text) {
-    ctx.font = "20px Arial";
-    ctx.fillText(text, 400, 250);
-
-
-}
-
 
 
 // http://stackoverflow.com/questions/1240408/reading-bytes-from-a-javascript-string/1242596#1242596
@@ -438,6 +431,16 @@ function visualiseCollision(value, hash, collisions) {
 
 }
 
+function visualiseCollisionSimple(value, hash, collision) {
+        ctx.clearRect(initial_x + hash * 50, 50, 50, 50);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#dee2e6";
+        ctx.strokeRect(initial_x + hash * 50, 50, 50, 50);
+        drawNumber(collision, hash, 1);
+    }
+
+
+
 
 function visualiseFinding(value, hash, level) {
     startY = level * 50 + (level - 1) * 35;
@@ -453,39 +456,37 @@ function visualiseGreen(hash) {
     ctx.lineWidth = 2;
     ctx.strokeStyle = "green";
     ctx.strokeRect(initial_x + hash * 50, 50, 50, 50);
-    ctx.clearRect(300, 150, 500, 300);
-    text = "Element found"
-    drawText(text)
 }
 
 
 function simpleHashing() {
 
-    ctx.clearRect(300, 150, 500, 300);
-    var value = document.getElementById('value').value;
-    var hash = (value % size) % size;
-    var text = String(hash) + "=(" + String(value) + "%" + String(size) + ")%" + String(size)
-    drawText(text)
+    var input = document.getElementById('value').value;
+    console.log(input)
+    var hash = (input % size) % size;
+    var text = String(hash) + "=(" + String(input) + "%" + String(size) + ")%" + String(size)
+    var result="";
 
     //Store collisions
     var collisions = new Array();
     if (typeof hash_table._buckets[hash] == 'undefined') {
-        hash_table._buckets[hash] = value;
-        drawNumber(value, hash, 1)
+        hash_table._buckets[hash] = input;
+        drawNumber(input, hash, 1)
+        result="Element inserted on table"
     }
 
     else {
         collisions.push(hash)
         ctx.lineWidth = 2;
         ctx.strokeStyle = "red";
-        ctx.clearRect(300, 150, 500, 300);
-        text = "Collision occurred"
-        drawText(text)
-
+        result="Collision occurred"
         ctx.strokeRect(initial_x + hash * 50, 50, 50, 50);
-        setTimeout(function () { visualiseCollision(value, hash, collisions); }, 700);
+        setTimeout(function () { visualiseCollisionSimple(input, hash, hash); }, 400);
 
     }
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
+
 }
 
 function findSimpleHashing() {
@@ -494,14 +495,17 @@ function findSimpleHashing() {
     var stored_value = hash_table._buckets[hash];
 
     if (stored_value == value) {
+        text="Element found"
         visualiseGreen(hash)
         setTimeout(function () { visualiseFinding(value, hash, 1); }, 700);
     }
 
     else {
         text = "Element not found"
-        drawText(text)
     }
+
+    var desc = "Result: " + text ;
+    document.getElementById("description").innerHTML=desc;
 }
 
 
@@ -513,7 +517,6 @@ function findChaining() {
     console.log(stored_value);
     if (typeof stored_value == undefined) {
         text = "Element not found"
-        drawText(text)
     }
     else {
         level = 0;
@@ -525,14 +528,13 @@ function findChaining() {
                 ctx.strokeStyle = "green";
                 startY = level * 50 + (level - 1) * 35;
                 ctx.strokeRect(initial_x + hash * 50, startY, 50, 50);
-
                 text = "Element found"
-                ctx.font = "20px Arial";
-                ctx.fillText(text, 400, 470);
                 setTimeout(function () { visualiseFinding(value, hash, level); }, 700);
             }
         }
     }
+    var desc = " Result: " + text;
+    document.getElementById("description").innerHTML=desc;
 }
 
 
@@ -543,18 +545,20 @@ function findChaining() {
 function Chaining() {
     var value = document.getElementById('value').value;
     var hash = (value % size) % size;
+    var text = String(hash) + "=(" + String(value) + "%" + String(size) + ")%" + String(size)
+
     if (typeof hash_table._buckets[hash] == 'undefined') {
+        result="Element added to the table"
         hash_table._buckets[hash] = new Array();
         hash_table._buckets[hash].push(value);
         drawNumber(value, hash, 1)
     }
 
     else if (hash_table._buckets[hash].length == 5) {
-        var text = "Sorry, we can not proceed further"
-        ctx.font = "20px Arial";
-        ctx.fillText(text, 400, 470);
+        var result = "Sorry, we can not proceed further"
     }
     else {
+        result="Collision occurred! Chaining performed!"
         console.log(typeof hash_table._buckets[hash]);
         hash_table._buckets[hash].push(value);
         var collisions = hash_table._buckets[hash].length
@@ -568,6 +572,8 @@ function Chaining() {
         drawNumber(value, hash, collisions)
 
     }
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
 }
 
 
@@ -578,14 +584,16 @@ function linearProbing() {
     var value = document.getElementById('value').value;
     var hash = ((value % size) + prob) % size;
     var text = String(hash) + "=(" + String(value) + "mod" + String(size) + ")+" + String(prob) + ")mod" + String(size)
-    drawText(text)
     var prev_hash = hash;
     console.log(prev_hash);
     var collisions = new Array();
     var values = new Array();
-
+if (typeof hash_table._buckets[hash] == 'undefined'){
+    result="Element inserted on the table"
+}
 
     while (typeof hash_table._buckets[hash] !== 'undefined') {
+        result="Collision occurred! Linear probing applied."
         stored_value = hash_table._buckets[hash];
         collisions.push(hash);
         values.push(stored_value)
@@ -594,8 +602,9 @@ function linearProbing() {
 
         if (prev_hash == hash) {
             ctx.clearRect(300, 150, 500, 300);
-            text = "No valid empty positions";
-            drawText(text);
+            text = "Result: No valid empty positions";
+            document.getElementById("description").innerHTML=text;
+
             break
         }
     }
@@ -608,11 +617,12 @@ function linearProbing() {
     }
     setTimeout(function () { visualiseCollision(value, values, collisions); }, 200);
 
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
 
     hash_table._buckets[hash] = value;
-    console.log("cc")
-    console.log(hash_table._buckets[hash]);
     drawNumber(value, hash, 1)
+
 }
 
 
@@ -623,8 +633,9 @@ function findLinearProbing() {
     var stored_value = hash_table._buckets[hash];
     console.log(stored_value);
     if (typeof stored_value == undefined) {
-        text = "Element not found"
-        drawText(text)
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
+
     }
     else {
         while (stored_value !== value) {
@@ -632,6 +643,8 @@ function findLinearProbing() {
             hash = ((value % size) + prob) % size;
             stored_value = hash_table._buckets[hash];
         }
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
     }
 
     visualiseGreen(hash)
@@ -649,10 +662,12 @@ function quadraticProbing() {
     var collisions = new Array();
     var values = new Array();
     var text = String(hash) + "=(" + String(value) + "%" + String(size) + ")+" + String(prob) + ")%" + String(size)
-    drawText(text)
-
+    if (typeof hash_table._buckets[hash] == 'undefined'){
+        result="Element inserted on the table"
+    }
 
     while (typeof hash_table._buckets[hash] !== 'undefined') {
+        result="Collision occurred! Quadratic probing applied."
         stored_value = hash_table._buckets[hash];
         collisions.push(hash);
         values.push(stored_value)
@@ -660,9 +675,8 @@ function quadraticProbing() {
         hash = ((value % size) + prob) % size;
 
         if (prev_hash == hash) {
-            ctx.clearRect(300, 150, 500, 300);
             text = "No valid empty positions";
-            drawText(text);
+            document.getElementById("description").innerHTML=text;
             break
         }
     }
@@ -675,10 +689,9 @@ function quadraticProbing() {
     }
     setTimeout(function () { visualiseCollision(value, values, collisions); }, 200);
 
-
+    var desc = "Calculations: " + text + "<br/> Result: " + result;
+    document.getElementById("description").innerHTML=desc;
     hash_table._buckets[hash] = value;
-    console.log("cc")
-    console.log(hash_table._buckets[hash]);
     drawNumber(value, hash, 1)
 
 }
@@ -814,8 +827,9 @@ function findQuadraticProbing() {
     var stored_value = hash_table._buckets[hash];
     console.log(stored_value);
     if (typeof stored_value == undefined) {
-        text = "Element not found"
-        drawText(text)
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
+
     }
 
     else {
@@ -824,6 +838,8 @@ function findQuadraticProbing() {
             hash = ((value % size) + prob) % size;
             stored_value = hash_table._buckets[hash];
         }
+        text = "Result: Element not found"
+        document.getElementById("description").innerHTML=text;
     }
 
     visualiseGreen(hash)
