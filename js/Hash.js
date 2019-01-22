@@ -658,8 +658,13 @@ function findLinearProbing() {
             prob = prob + 1;
             hash = ((value % size) + prob) % size;
             stored_value = hash_table._buckets[hash];
+            if (typeof stored_value == undefined) {
+                text = "Result: Element not found"
+                document.getElementById("description").innerHTML=text;
+            break;
+            }
         }
-        text = "Result: Element not found"
+        text = "Result: Element  found"
         document.getElementById("description").innerHTML=text;
     }
 
@@ -935,8 +940,13 @@ function findQuadraticProbing() {
             prob = Math.pow((prob + 1), 2);
             hash = ((value % size) + prob) % size;
             stored_value = hash_table._buckets[hash];
+            if (typeof stored_value == undefined) {
+                text = "Result: Element not found"
+                document.getElementById("description").innerHTML=text;
+            break;
+            }
         }
-        text = "Result: Element not found"
+        text = "Result: Element  found"
         document.getElementById("description").innerHTML=text;
     }
 
