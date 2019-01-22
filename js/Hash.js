@@ -309,6 +309,7 @@ function removeCanvas() {
     $("#canvas").attr("width", "0");
     $("svg").remove();
     $("#container").append("<svg></svg>");
+    $("#description").empty();
 }
 
 
@@ -320,6 +321,7 @@ function restoreCanvas() {
     $("#bloomTable").empty();
     $("svg").remove();
     greens = new Set([]);
+    $("#description").empty();
 }
 
 
@@ -332,6 +334,7 @@ function minimizeCanvas() {
     $("svg").remove();
     $("#bloomTable").empty();
     greens = new Set([]);
+    $("#description").empty();
 }
 
 
