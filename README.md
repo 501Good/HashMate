@@ -31,3 +31,7 @@ This project supports these types of hashing:
 6. Bloom filters
 
 Users can choose the size of the table from 1 to 20. After an element is inserted calculations are shown and the location in canvas. Users can search for elements in the table. 
+
+![UT](https://www.ut.ee/sites/default/files/styles/ut_content_width/public/tu_logod_17122015_horisontaal_eng_sinine_2.png)
+
+![IT Academy](https://www.cs.ut.ee/sites/default/files/styles/ut_content_width/public/ita_small-logo-eng.png)
