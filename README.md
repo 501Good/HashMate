@@ -38,4 +38,4 @@ Users can choose the size of the table from 1 to 20. After an element is inserte
 
 ![IT Academy](https://www.cs.ut.ee/sites/default/files/styles/ut_content_width/public/ita_small-logo-eng.png)
 
-**Ministry of Foreign Affairs Development Cooperation Program 1**
+**Ministry of Foreign Affairs Development Cooperation Program**
